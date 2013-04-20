@@ -200,4 +200,20 @@ This is ugly html.
         '<h1>hello <!-- stuff --> and <!-- la -->...</h1>'
     end
   end
+
+  context "when an offset is defined" do
+    
+    it "should open with any unclosed tags before offset" do
+      truncate("<div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a <strong>galley</strong> of type and scrambled it to make a type specimen book.</div>", :offset => 6).should eq("<div>...Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a <strong>galley</strong> of type and scrambled it to make a type specimen book.</div>")
+    end
+
+    it "should count length from offset" do
+      truncate("<div>Lorem Ipsum is <strong>simply</strong> dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a <strong>galley</strong> of type and scrambled it to make a type specimen book.</div>", :offset => 6, :length => 30).should eq("<div>...Ipsum is <strong>simply</strong> dummy text...</div>")
+    end
+    
+    it "should not prepend omission if offset is 0" do
+      truncate("<div>test prepend omission</div>", :offset => 0, :length => 7).should eq("<div>test...</div>")
+    end
+    
+  end
 end
